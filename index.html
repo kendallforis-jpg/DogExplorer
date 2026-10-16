@@ -1,0 +1,191 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7e8">
+  <meta name="description" content="Meet adorable dogs, explore breeds, save favorites, and play the breed guessing game.">
+  <title>Dog Explorer — good dogs, great discoveries</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Dog Explorer home">
+      <span class="brand-mark" aria-hidden="true">🐾</span>
+      <span>dog <strong>explorer</strong></span>
+    </a>
+    <div class="topbar-right">
+      <span class="status-pill"><span class="status-dot"></span> good dogs only</span>
+      <button id="installButton" class="button button-small button-outline" type="button" hidden>Install app</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> YOUR DAILY DOSE OF DOGS</p>
+        <h1>Big ears.<br><span>Happy hearts.</span></h1>
+        <p class="hero-intro">Meet your next favorite dog. Explore breeds, collect the cuties, and see where a little nose boop takes you.</p>
+        <div class="hero-actions">
+          <button id="heroRandomButton" class="button button-primary" type="button">Surprise me <span aria-hidden="true">↗</span></button>
+          <button class="button button-outline" type="button" data-view="breeds">Explore breeds</button>
+        </div>
+        <div class="hero-stats">
+          <div><strong id="breedStat">—</strong><span>breeds to explore</span></div>
+          <div><strong id="favoriteStat">0</strong><span>personal favorites</span></div>
+          <div><strong>∞</strong><span>good dog energy</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="A featured dog photo">
+        <div class="hero-sticker sticker-star">✦</div>
+        <div class="hero-sticker sticker-heart">♥</div>
+        <div class="hero-photo-wrap">
+          <img id="heroImage" src="" alt="A surprise dog" class="hero-photo" fetchpriority="high">
+          <div class="photo-label"><span class="photo-label-icon">🐶</span><span><strong id="heroBreed">Finding a good dog…</strong><small>certified cutie</small></span></div>
+        </div>
+        <span class="hero-scribble">woof!</span>
+      </div>
+    </section>
+
+    <section class="quick-tools" aria-label="Dog discovery tools">
+      <button class="tool-card tool-peach" type="button" data-view="random">
+        <span class="tool-icon">🎲</span><span><strong>Random dog</strong><small>Meet someone new</small></span><span class="tool-arrow">↗</span>
+      </button>
+      <button class="tool-card tool-lilac" type="button" data-view="breeds">
+        <span class="tool-icon">🔎</span><span><strong>Breed explorer</strong><small>Find your type</small></span><span class="tool-arrow">↗</span>
+      </button>
+      <button class="tool-card tool-mint" type="button" data-view="favorites">
+        <span class="tool-icon">💖</span><span><strong>My favorites</strong><small>Your cutest collection</small></span><span class="tool-arrow">↗</span>
+      </button>
+      <button class="tool-card tool-yellow" type="button" data-view="quiz">
+        <span class="tool-icon">🧠</span><span><strong>Guess the breed</strong><small>Put your paws to it</small></span><span class="tool-arrow">↗</span>
+      </button>
+    </section>
+
+    <section id="randomSection" class="section-block">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">THE CUTENESS CONTINUES</p>
+          <h2>Freshly fetched <span class="heading-emoji">✨</span></h2>
+          <p class="section-subtitle">A little gallery of excellent dogs. Every refresh is a new adventure.</p>
+        </div>
+        <button id="refreshGalleryButton" class="button button-outline" type="button"><span aria-hidden="true">↻</span> More dogs</button>
+      </div>
+      <div id="galleryGrid" class="dog-grid" aria-live="polite">
+        <div class="loading-card"><span class="loader"></span><p>Fetching the goodest dogs…</p></div>
+      </div>
+      <p id="galleryMessage" class="inline-message" role="status"></p>
+    </section>
+
+    <section id="breedSection" class="section-block section-tinted">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">MEET THE NEIGHBORHOOD</p>
+          <h2>Find your kind of dog <span class="heading-emoji">🐕</span></h2>
+          <p class="section-subtitle">Search the breed directory, then fetch a fresh photo from your pick.</p>
+        </div>
+      </div>
+      <div class="breed-controls">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input id="breedSearch" type="search" placeholder="Search breeds, e.g. corgi…" autocomplete="off">
+          <span class="search-shortcut">Ctrl K</span>
+        </label>
+        <label class="select-label" for="breedSelect">Or pick a breed
+          <select id="breedSelect"><option value="">Loading breeds…</option></select>
+        </label>
+      </div>
+      <div id="breedChips" class="breed-chips" aria-label="Popular breeds"></div>
+      <div class="breed-feature">
+        <div class="breed-feature-copy">
+          <span class="feature-tag">YOUR PICK</span>
+          <h3 id="selectedBreedTitle">Choose a breed</h3>
+          <p id="selectedBreedText">Select a breed above to see a new photo. Some breeds also have sub-breeds to explore.</p>
+          <button id="breedPhotoButton" class="button button-primary" type="button" disabled>Show me this breed ↗</button>
+        </div>
+        <div class="breed-feature-image">
+          <img id="breedImage" src="" alt="Selected dog breed" loading="lazy">
+          <div id="breedImagePlaceholder" class="image-placeholder">🐕<span>Your next best friend</span></div>
+        </div>
+      </div>
+      <div id="subBreedArea" class="subbreed-area" hidden>
+        <span class="subbreed-title">Sub-breeds</span>
+        <div id="subBreedChips" class="breed-chips"></div>
+      </div>
+    </section>
+
+    <section id="favoritesSection" class="section-block">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">THE HALL OF FAME</p>
+          <h2>Your favorite floofs <span class="heading-emoji">💗</span></h2>
+          <p class="section-subtitle">Tap the heart on any photo to keep it here. Favorites are saved on this device.</p>
+        </div>
+        <span id="favoritesCount" class="count-badge">0 saved</span>
+      </div>
+      <div id="favoritesGrid" class="dog-grid favorites-grid"></div>
+      <p id="favoritesEmpty" class="empty-state">
+        <span>🧺</span>
+        <strong>No favorites just yet</strong>
+        <small>When a dog steals your heart, tap its heart button and it’ll show up here.</small>
+        <button class="button button-outline" type="button" data-view="random">Find a favorite</button>
+      </p>
+    </section>
+
+    <section id="quizSection" class="section-block quiz-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">A TINY BRAIN GAME</p>
+          <h2>Who's that dog? <span class="heading-emoji">🎯</span></h2>
+          <p class="section-subtitle">Look at the photo, trust your instincts, and guess the breed.</p>
+        </div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-photo-wrap">
+          <img id="quizImage" src="" alt="Guess the breed in this photo" loading="lazy">
+          <div id="quizPlaceholder" class="image-placeholder">🐶<span>Ready for a challenge?</span></div>
+        </div>
+        <div class="quiz-content">
+          <div class="quiz-topline">
+            <span class="feature-tag">ROUND <span id="quizRound">1</span></span>
+            <span class="quiz-score">Score <strong id="quizScore">0</strong></span>
+          </div>
+          <h3>Can you name this breed?</h3>
+          <p id="quizFeedback" class="quiz-feedback">Pick the breed you think matches the photo.</p>
+          <div id="quizOptions" class="quiz-options"><button class="button button-outline" type="button" disabled>Loading choices…</button></div>
+          <button id="nextQuizButton" class="button button-primary" type="button" disabled>Next dog →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="api-note">
+      <span class="api-note-icon">💌</span>
+      <p><strong>Made for dog people.</strong><br>Photos and breed data are provided by the open-source <a href="https://dog.ceo/dog-api/" target="_blank" rel="noreferrer">Dog CEO API</a>. Favorites and quiz scores stay in this browser.</p>
+      <span class="api-paw">🐾</span>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="footer-brand" href="./">🐾 Dog Explorer</a>
+    <span>Made with love and a suspicious amount of dog hair.</span>
+    <button id="backToTop" class="back-top" type="button">Back to top ↑</button>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js", {
+          scope: "./",
+          updateViaCache: "none"
+        }).catch(error => console.error("Service worker registration failed:", error));
+      });
+    }
+  </script>
+</body>
+</html>
